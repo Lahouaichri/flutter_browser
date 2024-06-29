@@ -145,8 +145,8 @@ class _BrowserState extends State<Browser> with SingleTickerProviderStateMixin {
     }
 
     for (final webViewTab in browserModel.webViewTabs) {
-      var isCurrentTab = webViewTab.webViewModel.tabIndex ==
-          browserModel.getCurrentTabIndex();
+      var isCurrentTab =
+          webViewTab.webViewModel.tabIndex == browserModel.getCurrentTabIndex();
 
       if (isCurrentTab) {
         Future.delayed(const Duration(milliseconds: 100), () {
@@ -222,7 +222,7 @@ class _BrowserState extends State<Browser> with SingleTickerProviderStateMixin {
                   children: <Widget>[
                     Material(
                       color: isCurrentTab
-                          ? Colors.blue
+                          ? const Color.fromARGB(255, 13, 52, 83)
                           : (webViewTab.webViewModel.isIncognitoMode
                               ? Colors.black
                               : Colors.white),

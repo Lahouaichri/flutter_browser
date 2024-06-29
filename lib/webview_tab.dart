@@ -35,17 +35,49 @@ class _WebViewTabState extends State<WebViewTab> with WidgetsBindingObserver {
   final TextEditingController _httpAuthPasswordController =
       TextEditingController();
 
+  // list of Ad URL filters to be used to block ads loading.
+  final adUrlFilters = [
+    ".*.doubleclick.net/.*",
+    ".*.ads.pubmatic.com/.*",
+    ".*.googlesyndication.com/.*",
+    ".*.google-analytics.com/.*",
+    ".*.googletagmanager.com/.*",
+    ".*.adservice.google.*/.*",
+    ".*.adbrite.com/.*",
+    ".*.exponential.com/.*",
+    ".*.quantserve.com/.*",
+    ".*.scorecardresearch.com/.*",
+    ".*.zedo.com/.*",
+    ".*.adsafeprotected.com/.*",
+    ".*.teads.tv/.*",
+    ".*.outbrain.com/.*",
+    ".*.dummieseardrum.com/.*",
+    ".*.falcatayamalka.com/.*",
+    ".*.hbcdn.net/.*",
+  ];
+
+  final List<ContentBlocker> contentBlockers = [];
+
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
     super.initState();
 
+    // for each Ad URL filter, add a Content Blocker to block its loading.
+    for (final adUrlFilter in adUrlFilters) {
+      contentBlockers.add(ContentBlocker(
+          trigger: ContentBlockerTrigger(
+            urlFilter: adUrlFilter,
+          ),
+          action: ContentBlockerAction(
+            type: ContentBlockerActionType.BLOCK,
+          )));
+    }
+
     _pullToRefreshController = kIsWeb
         ? null
         : PullToRefreshController(
-            settings: PullToRefreshSettings(
-              color: Colors.blue
-            ),
+            settings: PullToRefreshSettings(color: Colors.blue),
             onRefresh: () async {
               if (defaultTargetPlatform == TargetPlatform.android) {
                 _webViewController?.reload();
@@ -160,6 +192,7 @@ class _WebViewTabState extends State<WebViewTab> with WidgetsBindingObserver {
     initialSettings.isFraudulentWebsiteWarningEnabled = true;
     initialSettings.disableLongPressContextMenuOnLinks = true;
     initialSettings.allowingReadAccessTo = WebUri('file://$WEB_ARCHIVE_DIR/');
+    initialSettings.contentBlockers = contentBlockers;
 
     return InAppWebView(
       keepAlive: widget.webViewModel.keepAlive,
@@ -175,7 +208,8 @@ class _WebViewTabState extends State<WebViewTab> with WidgetsBindingObserver {
         _webViewController = controller;
         widget.webViewModel.webViewController = controller;
         widget.webViewModel.pullToRefreshController = _pullToRefreshController;
-        widget.webViewModel.findInteractionController = _findInteractionController;
+        widget.webViewModel.findInteractionController =
+            _findInteractionController;
 
         if (Util.isAndroid()) {
           controller.startSafeBrowsing();

@@ -30,7 +30,7 @@ class _UrlInfoPopupState extends State<UrlInfoPopup> {
   var showFullInfoUrl = false;
   var defaultTextSpanStyle = const TextStyle(
     color: Colors.black54,
-    fontSize: 12.5,
+    fontSize: 10.0,
   );
 
   @override

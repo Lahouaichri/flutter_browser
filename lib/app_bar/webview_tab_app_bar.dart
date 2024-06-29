@@ -179,14 +179,14 @@ class _WebViewTabAppBarState extends State<WebViewTabAppBar>
             textInputAction: TextInputAction.go,
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.only(
-                  left: 45.0, top: 10.0, right: 10.0, bottom: 10.0),
+                  left: 45.0, top: 10.0, right: 10.0, bottom: 7.0),
               filled: true,
               fillColor: Colors.white,
               border: outlineBorder,
               focusedBorder: outlineBorder,
               enabledBorder: outlineBorder,
               hintText: "Search for or type a web address",
-              hintStyle: const TextStyle(color: Colors.black54, fontSize: 16.0),
+              hintStyle: const TextStyle(color: Colors.black54, fontSize: 13.0),
             ),
             style: const TextStyle(color: Colors.black, fontSize: 16.0),
           ),
@@ -723,9 +723,13 @@ class _WebViewTabAppBarState extends State<WebViewTabAppBar>
         showWebArchives();
         break;
       case PopupMenuActions.FIND_ON_PAGE:
-        var isFindInteractionEnabled = currentWebViewModel.settings?.isFindInteractionEnabled ?? false;
-        var findInteractionController = currentWebViewModel.findInteractionController;
-        if (Util.isIOS() && isFindInteractionEnabled && findInteractionController != null) {
+        var isFindInteractionEnabled =
+            currentWebViewModel.settings?.isFindInteractionEnabled ?? false;
+        var findInteractionController =
+            currentWebViewModel.findInteractionController;
+        if (Util.isIOS() &&
+            isFindInteractionEnabled &&
+            findInteractionController != null) {
           await findInteractionController.presentFindNavigator();
         } else if (widget.showFindOnPage != null) {
           widget.showFindOnPage!();
@@ -1006,9 +1010,10 @@ class _WebViewTabAppBarState extends State<WebViewTabAppBar>
 
       var currentSettings = await webViewController.getSettings();
       if (currentSettings != null) {
-        currentSettings.preferredContentMode = webViewModel?.isDesktopMode ?? false
-            ? UserPreferredContentMode.DESKTOP
-            : UserPreferredContentMode.RECOMMENDED;
+        currentSettings.preferredContentMode =
+            webViewModel?.isDesktopMode ?? false
+                ? UserPreferredContentMode.DESKTOP
+                : UserPreferredContentMode.RECOMMENDED;
         await webViewController.setSettings(settings: currentSettings);
       }
       await webViewController.reload();
